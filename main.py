@@ -3,6 +3,8 @@ from PySide6.QtWidgets import *
 from sys import argv, exit
 from typing import Optional
 
+# pyinstaller --windowed --onefile main.py
+
 class Window(QWidget):
     def __init__(self):
         super().__init__()
@@ -10,6 +12,7 @@ class Window(QWidget):
         self.variables: dict[str, Optional[str]] = {
             "binary": "ffmpeg",
             "images_directory": None,
+            "extension": "jpg",
             "framerate": "30",
             "w": "1920",
             "h": "1080",
@@ -29,7 +32,10 @@ class Window(QWidget):
         self.setLayout(layout)
 
         widgets = [
-            FileWidget(self),
+            [
+                FileWidget(self),
+                SelectWidget(self, "extension", ["jpg", "tiff"], "Extension")
+            ],
             InputWidget(self, ["w", "h"], "Size"),
             InputWidget(self, ["x", "y"], "Position"),
             [
@@ -54,7 +60,7 @@ class Window(QWidget):
         if not all(self.variables.values()):
             return None
         
-        return "{binary} -pattern_type glob -i '{images_directory}/*.jpg' -framerate {framerate} -filter:v crop=x={x}:y={y}:w={w}:h={h} -pix_fmt {colour} -c:v {encoder} -b:v {bitrate}M {output_directory}/timelapse.mp4 ".format(**self.variables)
+        return "{binary} -pattern_type glob -i '{images_directory}/*.{extension}' -framerate {framerate} -filter:v crop=x={x}:y={y}:w={w}:h={h} -pix_fmt {colour} -c:v {encoder} -b:v {bitrate}M {output_directory}/timelapse.mp4 ".format(**self.variables)
 
     def create_layout(self, widgets: list[QWidget], parent_layout: QVBoxLayout | QHBoxLayout):
         for widget in widgets:
