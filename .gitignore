@@ -3,3 +3,4 @@ dist
 images
 venv
 main.spec
+.DS_Store
