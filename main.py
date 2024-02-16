@@ -13,7 +13,7 @@ class Window(QWidget):
             "binary": "ffmpeg",
             "images_directory": None,
             "extension": "jpg",
-            "framerate": "30",
+            "framerate": None,
             "w": "1920",
             "h": "1080",
             "x": None,
@@ -39,8 +39,8 @@ class Window(QWidget):
             InputWidget(self, ["w", "h"], "Size"),
             InputWidget(self, ["x", "y"], "Position"),
             [
-                SelectWidget(self, "framerate", ["30", "60", "120"], "Framerate"),
                 SelectWidget(self, "colour", ["yuvj420p"], "Colour"),
+                InputWidget(self, ["framerate"], "Framerate"),
             ],
             [
                 SelectWidget(self, "encoder", ["libx264"], "Encoder"),
